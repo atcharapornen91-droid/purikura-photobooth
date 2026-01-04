@@ -1,0 +1,101 @@
+body {
+  background: linear-gradient(135deg, #ffeaf4, #e8f6ff);
+  font-family: "Comic Sans MS", "Kanit", sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+h1 {
+  color: #ff6fae;
+}
+
+/* กล่องหลัก */
+.booth {
+  background: white;
+  padding: 16px;
+  border-radius: 28px;
+  width: 420px;
+  margin: auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+/* กรอบพรีคุระ */
+.frame {
+  position: relative;
+  padding: 10px;
+  background: linear-gradient(45deg, #ffb6d5, #b5e3ff);
+  border-radius: 24px;
+}
+
+/* กล้องแนวนอน */
+video {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 18px;
+}
+
+/* Countdown */
+#countdown {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 96px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 15px #ff6fae;
+  pointer-events: none;
+}
+
+/* Canvas */
+canvas {
+  width: 100%;
+  display: none;
+  border-radius: 18px;
+}
+
+/* ปุ่ม */
+button {
+  background: #ff9acb;
+  border: none;
+  padding: 12px 26px;
+  border-radius: 999px;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #ff7eb6;
+}
+
+/* ฟิลเตอร์ */
+select {
+  margin: 8px;
+  padding: 6px 12px;
+  border-radius: 14px;
+  border: 1px solid #ffc1dc;
+}
+
+/* สติ๊กเกอร์ */
+.stickers span {
+  font-size: 28px;
+  margin: 4px;
+  cursor: pointer;
+}
+
+.stickers span:hover {
+  transform: scale(1.2);
+}
+
+a {
+  text-decoration: none;
+  color: #ff6fae;
+  font-weight: bold;
+}
+
+#count {
+  font-weight: bold;
+}

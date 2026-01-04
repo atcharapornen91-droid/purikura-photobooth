@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>JP Purikura 3-Cut</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>🇯🇵 プリクラ 3-Cut</h1>
+<p>แนวนอน • สี่เหลี่ยม • 3 รูป ✨</p>
+
+<div class="booth">
+  <div class="frame">
+    <video id="video" autoplay playsinline></video>
+    <div id="countdown"></div>
+    <canvas id="canvas"></canvas>
+  </div>
+</div>
+
+<p id="count">ถ่ายไปแล้ว: 0 / 3</p>
+
+<!-- ฟิลเตอร์ -->
+<select id="filter" onchange="changeFilter()">
+  <option value="none">🌈 Normal</option>
+  <option value="brightness(1.1) saturate(1.3)">✨ Kawaii</option>
+  <option value="grayscale(1)">🖤 Mono</option>
+  <option value="sepia(0.7)">🤎 Retro</option>
+  <option value="blur(2px) brightness(1.1)">💭 Soft</option>
+</select>
+
+<!-- สติ๊กเกอร์ -->
+<div class="stickers">
+  <span onclick="selectSticker('💖')">💖</span>
+  <span onclick="selectSticker('✨')">✨</span>
+  <span onclick="selectSticker('🎀')">🎀</span>
+  <span onclick="selectSticker('😆')">😆</span>
+  <span onclick="selectSticker('🐰')">🐰</span>
+</div>
+
+<div class="buttons">
+  <button onclick="startCountdown()">📸 START</button>
+  <br><br>
+  <a id="download" download="purikura-3cut.png">⬇ DOWNLOAD</a>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
