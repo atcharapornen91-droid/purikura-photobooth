@@ -12,103 +12,120 @@ let images = [];
 let currentFilter = "none";
 let currentSticker = "💖";
 
-/* ขนาดรูป */
-const CUT_SIZE = 360;        // 1 รูป = 360x360
-const FINAL_WIDTH = CUT_SIZE * 3; // 1080
-const FINAL_HEIGHT = CUT_SIZE;    // 360
+let currentFacing = "user";
+let currentStream = null;
+
+const CUT = 360;
 
 /* เปิดกล้อง */
-navigator.mediaDevices.getUserMedia({
-  video: { width: 1280, height: 720 }
-}).then(stream => {
+async function startCamera() {
+  if (currentStream) {
+    currentStream.getTracks().forEach(t => t.stop());
+  }
+
+  const stream = await navigator.mediaDevices.getUserMedia({
+    video: { facingMode: currentFacing }
+  });
+
+  currentStream = stream;
   video.srcObject = stream;
-});
+}
+
+startCamera();
 
 /* ฟิลเตอร์ */
 function changeFilter() {
-  currentFilter = filterSelect.value;
+  const v = filterSelect.value;
+  if (v === "oldmoney" || v === "omgrain") {
+    currentFilter =
+      "brightness(0.8) contrast(0.7) saturate(0.85) sepia(0.25)";
+  } else {
+    currentFilter = v;
+  }
   video.style.filter = currentFilter;
 }
 
-/* เลือกสติ๊กเกอร์ */
-function selectSticker(sticker) {
-  currentSticker = sticker;
+/* สลับกล้อง */
+function switchCamera() {
+  currentFacing = currentFacing === "user" ? "environment" : "user";
+  startCamera();
 }
 
-/* เริ่มนับถอยหลัง */
-function startCountdown() {
-  if (shots >= maxShots) {
-    alert("ถ่ายครบแล้วค่ะ 💕");
-    return;
-  }
+/* สติ๊กเกอร์ */
+function selectSticker(s) {
+  currentSticker = s;
+}
 
-  let count = 3;
-  countdownEl.innerText = count;
+/* นับถอยหลัง */
+function startCountdown() {
+  if (shots >= maxShots) return;
+
+  let c = 3;
+  countdownEl.innerText = c;
 
   const timer = setInterval(() => {
-    count--;
-    if (count === 0) {
+    c--;
+    if (c === 0) {
       clearInterval(timer);
       countdownEl.innerText = "";
       takePhoto();
     } else {
-      countdownEl.innerText = count;
+      countdownEl.innerText = c;
     }
   }, 1000);
 }
 
-/* ถ่ายรูป */
+/* Grain */
+function addGrain(ctx, w, h) {
+  const img = ctx.getImageData(0, 0, w, h);
+  for (let i = 0; i < img.data.length; i += 4) {
+    const g = (Math.random() - 0.5) * 20;
+    img.data[i] += g;
+    img.data[i + 1] += g;
+    img.data[i + 2] += g;
+  }
+  ctx.putImageData(img, 0, 0);
+}
+
+/* ถ่าย */
 function takePhoto() {
-  const tempCanvas = document.createElement("canvas");
-  tempCanvas.width = CUT_SIZE;
-  tempCanvas.height = CUT_SIZE;
-  const tempCtx = tempCanvas.getContext("2d");
+  const temp = document.createElement("canvas");
+  temp.width = CUT;
+  temp.height = CUT;
+  const tctx = temp.getContext("2d");
 
-  tempCtx.filter = currentFilter;
+  tctx.filter = currentFilter;
 
-  /* ครอปเป็นสี่เหลี่ยมตรงกลาง */
   const size = Math.min(video.videoWidth, video.videoHeight);
   const sx = (video.videoWidth - size) / 2;
   const sy = (video.videoHeight - size) / 2;
 
-  tempCtx.drawImage(
-    video,
-    sx, sy, size, size,
-    0, 0, CUT_SIZE, CUT_SIZE
-  );
+  tctx.drawImage(video, sx, sy, size, size, 0, 0, CUT, CUT);
 
-  /* กรอบ */
-  tempCtx.strokeStyle = "#ff9acb";
-  tempCtx.lineWidth = 16;
-  tempCtx.strokeRect(0, 0, CUT_SIZE, CUT_SIZE);
+  if (filterSelect.value === "omgrain") {
+    addGrain(tctx, CUT, CUT);
+  }
 
-  /* สติ๊กเกอร์ */
-  tempCtx.font = "56px sans-serif";
-  tempCtx.fillText(currentSticker, CUT_SIZE - 80, 70);
+  tctx.font = "48px sans-serif";
+  tctx.fillText(currentSticker, CUT - 70, 60);
 
-  images.push(tempCanvas);
+  images.push(temp);
   shots++;
   countText.innerText = `ถ่ายไปแล้ว: ${shots} / 3`;
 
-  if (shots === maxShots) {
-    combinePhotos();
-  }
+  if (shots === maxShots) combine();
 }
 
-/* รวม 3 รูปแนวนอน */
-function combinePhotos() {
-  canvas.width = FINAL_WIDTH;
-  canvas.height = FINAL_HEIGHT;
+/* รวม 3 รูป */
+function combine() {
+  canvas.width = CUT * 3;
+  canvas.height = CUT;
 
-  for (let i = 0; i < maxShots; i++) {
-    ctx.drawImage(images[i], i * CUT_SIZE, 0);
-  }
-
-  ctx.font = "32px sans-serif";
-  ctx.fillText("プリクラ 💖", 20, FINAL_HEIGHT - 20);
+  images.forEach((img, i) => {
+    ctx.drawImage(img, i * CUT, 0);
+  });
 
   canvas.style.display = "block";
   download.href = canvas.toDataURL("image/png");
 }
-
 

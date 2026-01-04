@@ -2,13 +2,17 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
+
+  <!-- สำคัญมาก: ทำให้มือถือไม่เล็ก -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>JP Purikura 3-Cut</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>🇯🇵 プリクラ 3-Cut</h1>
-<p>แนวนอน • สี่เหลี่ยม • 3 รูป ✨</p>
+<h1>🇯🇵 プリクラ</h1>
+<p>3 Cut • Square • Mobile Ready</p>
 
 <div class="booth">
   <div class="frame">
@@ -27,6 +31,8 @@
   <option value="grayscale(1)">🖤 Mono</option>
   <option value="sepia(0.7)">🤎 Retro</option>
   <option value="blur(2px) brightness(1.1)">💭 Soft</option>
+  <option value="oldmoney">🤎 Old Money</option>
+  <option value="omgrain">🎞️ OM grain</option>
 </select>
 
 <!-- สติ๊กเกอร์ -->
@@ -40,10 +46,12 @@
 
 <div class="buttons">
   <button onclick="startCountdown()">📸 START</button>
+  <button onclick="switchCamera()">🔄 สลับกล้อง</button>
   <br><br>
-  <a id="download" download="purikura-3cut.png">⬇ DOWNLOAD</a>
+  <a id="download" download="purikura.png">⬇ DOWNLOAD</a>
 </div>
 
 <script src="script.js"></script>
 </body>
 </html>
+
